@@ -1,23 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import Account from "components/Account/Account";
 import Chains from "components/Chains";
-import TokenPrice from "components/TokenPrice";
-import ERC20Balance from "components/ERC20Balance";
-import ERC20Transfers from "components/ERC20Transfers";
-import DEX from "components/DEX";
 import NFTBalance from "components/NFTBalance";
-import Wallet from "components/Wallet";
-import { Layout, Tabs } from "antd";
+import { Layout } from "antd";
 import "antd/dist/antd.css";
 import NativeBalance from "components/NativeBalance";
 import "./style.css";
-import QuickStart from "components/QuickStart";
-import Contract from "components/Contract/Contract";
 import Text from "antd/lib/typography/Text";
-import Ramper from "components/Ramper";
 import MenuItems from "./components/MenuItems";
+import NFTTokenIds from "components/NFTTokenIds";
+import React from "react";
+import NFTMarketTransactions from "components/Transactions";
 const { Header, Footer } = Layout;
 
 const styles = {
@@ -52,6 +47,7 @@ const styles = {
 };
 const App = ({ isServerInfo }) => {
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } = useMoralis();
+  const [inputValue, SetInputValue] = useState("0x92CD91827798049b4f4A808908268162C063bd0B");
 
   useEffect(() => {
     const connectorId = window.localStorage.getItem("connectorId");
@@ -67,12 +63,12 @@ const App = ({ isServerInfo }) => {
           <MenuItems />
           <div style={styles.headerRight}>
             <Chains />
-            <TokenPrice
+            {/*<TokenPrice
               address="0x1f9840a85d5af5bf1d1762f925bdaddc4201f984"
               chain="eth"
               image="https://cloudflare-ipfs.com/ipfs/QmXttGpZrECX5qCyXbBQiqgQNytVGeZW5Anewvh2jc4psg/"
               size="40px"
-            />
+            /> */}
             <NativeBalance />
             <Account />
           </div>
@@ -80,7 +76,7 @@ const App = ({ isServerInfo }) => {
 
         <div style={styles.content}>
           <Switch>
-            <Route exact path="/quickstart">
+            {/*<Route exact path="/quickstart">
               <QuickStart isServerInfo={isServerInfo} />
             </Route>
             <Route path="/wallet">
@@ -107,11 +103,18 @@ const App = ({ isServerInfo }) => {
             </Route>
             <Route path="/erc20transfers">
               <ERC20Transfers />
+          </Route>*/}
+            <Route path="/nftMarket">
+              <NFTTokenIds inputValue={inputValue} />
             </Route>
             <Route path="/nftBalance">
               <NFTBalance />
             </Route>
-            <Route path="/contract">
+            <Route path="/transactions">
+              <NFTMarketTransactions inputValue={inputValue} />
+            </Route>
+            <Redirect to="/nftBalance" />
+            {/*<Route path="/contract">
               <Contract />
             </Route>
             <Route path="/">
@@ -122,7 +125,7 @@ const App = ({ isServerInfo }) => {
             </Route>
             <Route path="/nonauthenticated">
               <>Please login using the "Authenticate" button</>
-            </Route>
+        </Route>*/}
           </Switch>
         </div>
       </Router>
