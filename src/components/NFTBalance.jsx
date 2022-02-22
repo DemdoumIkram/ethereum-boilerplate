@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useMoralis, useNFTBalances, useWeb3ExecuteFunction } from "react-moralis";
 import { Card, Image, Tooltip, Modal, Input, Skeleton, Button, Spin, Alert } from "antd";
 import { FileSearchOutlined, ShoppingCartOutlined } from "@ant-design/icons";
-import { getExplorer } from "helpers/networks";
+import { getExplorer, getNativeByChain } from "helpers/networks";
 import { useVerifyMetadata } from "hooks/useVerifyMetadata";
 
 const { Meta } = Card;
@@ -24,7 +24,7 @@ function NFTBalance() {
   const { data: NFTBalances } = useNFTBalances();
   const { Moralis, chainId } = useMoralis();
   const [contractABI, setContractABI] = useState('[ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "uint256", "name": "itemId", "type": "uint256" }, { "indexed": true, "internalType": "address", "name": "nftContract", "type": "address" }, { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "indexed": false, "internalType": "address", "name": "seller", "type": "address" }, { "indexed": false, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "price", "type": "uint256" }, { "indexed": false, "internalType": "bool", "name": "sold", "type": "bool" } ], "name": "MarketItemCreated", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "uint256", "name": "itemId", "type": "uint256" }, { "indexed": false, "internalType": "address", "name": "owner", "type": "address" } ], "name": "MarketItemSold", "type": "event" }, { "inputs": [ { "internalType": "address", "name": "nftContract", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "uint256", "name": "price", "type": "uint256" } ], "name": "createMarketItem", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "nftContract", "type": "address" }, { "internalType": "uint256", "name": "itemId", "type": "uint256" } ], "name": "createMarketSale", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [], "name": "fetchMarketItems", "outputs": [ { "components": [ { "internalType": "uint256", "name": "itemId", "type": "uint256" }, { "internalType": "address", "name": "nftContract", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "address payable", "name": "seller", "type": "address" }, { "internalType": "address payable", "name": "owner", "type": "address" }, { "internalType": "uint256", "name": "price", "type": "uint256" }, { "internalType": "bool", "name": "sold", "type": "bool" } ], "internalType": "struct marketPlaceBoilerPlate.MarketItem[]", "name": "", "type": "tuple[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" }, { "internalType": "address", "name": "", "type": "address" }, { "internalType": "uint256[]", "name": "", "type": "uint256[]" }, { "internalType": "uint256[]", "name": "", "type": "uint256[]" }, { "internalType": "bytes", "name": "", "type": "bytes" } ], "name": "onERC1155BatchReceived", "outputs": [ { "internalType": "bytes4", "name": "", "type": "bytes4" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" }, { "internalType": "address", "name": "", "type": "address" }, { "internalType": "uint256", "name": "", "type": "uint256" }, { "internalType": "uint256", "name": "", "type": "uint256" }, { "internalType": "bytes", "name": "", "type": "bytes" } ], "name": "onERC1155Received", "outputs": [ { "internalType": "bytes4", "name": "", "type": "bytes4" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" }, { "internalType": "address", "name": "", "type": "address" }, { "internalType": "uint256", "name": "", "type": "uint256" }, { "internalType": "bytes", "name": "", "type": "bytes" } ], "name": "onERC721Received", "outputs": [ { "internalType": "bytes4", "name": "", "type": "bytes4" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" } ]'); //Smart Contract ABI here
-  const [marketAddress, setMarketAddress] = useState("0x9f6eA2398F5A4195eF4bcC63eb5288F38c2344e0"); //Smart Contract Address Here
+  const [marketAddress, setMarketAddress] = useState("0xD8CDc79e71B910f55A4e16Bc8EAc13Ba60927Edc"); //Smart Contract Address Here
   const [visible, setVisibility] = useState(false);
   const [nftToSell, setNftToSell] = useState(null);
   const [price, setPrice] = useState(1);
@@ -35,6 +35,7 @@ function NFTBalance() {
   const contractABIJson = JSON.parse(contractABI);
   const listItemFunction = "createMarketItem";
   const ItemImage = Moralis.Object.extend("ItemImages");
+  const nativeName = getNativeByChain(chainId);
 
   function addItemImage() {
     const itemImage = new ItemImage();
@@ -71,10 +72,9 @@ function NFTBalance() {
         setVisibility(false);
         addItemImage();
         succList();
-        alert('ok')
       },
       onError: (error) => {
-        alert(String(error))
+        console.log(String(error))
         failList()
       },
     });
@@ -170,8 +170,9 @@ function NFTBalance() {
             <div style={{ marginBottom: "10px" }}></div>
           </>
         )}
-        {NFTBalances &&
-          NFTBalances.result.map((nft, index) => (
+        <Skeleton loading={!NFTBalances?.result}>
+        {NFTBalances && NFTBalances.result &&
+          NFTBalances.result.filter((nft)=>  nft.token_address == "0x121949edf57afc7a57d64ab3e232000281e270b6" ).map((nft, index) => (
             <Card
               hoverable
               actions={[
@@ -204,6 +205,7 @@ function NFTBalance() {
               <Meta title={nft.name} description={nft.token_address} />
             </Card>
           ))}
+        </Skeleton>
       </div>
 
       <Modal
@@ -220,23 +222,24 @@ function NFTBalance() {
             Approve
           </Button>,
           <Button onClick={() => list(nftToSell, price)} type="primary">
-            List
+            Sell
           </Button>
         ]}
       >
         <Spin spinning={loading}>
           <img
-            src={`${nftToSell?.image}`}
-            style={{
-              width: "250px",
-              margin: "auto",
-              borderRadius: "10px",
-              marginBottom: "15px",
-            }}
-          />
+                  src={`${nftToSell?.image}`}
+                  style={{
+                    width: "250px",
+                    margin: "auto",
+                    borderRadius: "10px",
+                    marginBottom: "15px",
+                  }}
+                  alt=""
+                />
           <Input
             autoFocus
-            placeholder="Listing Price in MATIC"
+            placeholder={"Listing Price in "+nativeName}
             onChange={(e) => setPrice(e.target.value)}
           />
         </Spin>

@@ -15,7 +15,6 @@ export const useNFTTokenIds = (options) => {
   
 
   useEffect(() => {
-    console.log('isini',isInitialized)
     if (!isInitialized || !chainId) return null;
     const { address } = options;
     console.log("token",token)

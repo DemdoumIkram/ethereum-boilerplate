@@ -48,7 +48,7 @@ const styles = {
 };
 const App = ({ isServerInfo }) => {
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } = useMoralis();
-  const [inputValue, SetInputValue] = useState("0x92CD91827798049b4f4A808908268162C063bd0B");
+  const [inputValue, SetInputValue] = useState("0x121949edf57aFC7A57D64ab3e232000281E270b6");
 
   useEffect(() => {
     const connectorId = window.localStorage.getItem("connectorId");
@@ -60,7 +60,6 @@ const App = ({ isServerInfo }) => {
     <Layout style={{ height: "100vh", overflow: "auto" }}>
       <Router>
         <Header style={styles.header}>
-          <Logo />
           <MenuItems />
           <div style={styles.headerRight}>
             <Chains />

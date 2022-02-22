@@ -21,7 +21,7 @@ const styles = {
 };
 
 const menuItems = [
-  {
+/*  {
     key: "0x1",
     value: "Ethereum",
     icon: <ETHLogo />,
@@ -35,13 +35,13 @@ const menuItems = [
     key: "0x3",
     value: "Ropsten Testnet",
     icon: <ETHLogo />,
-  },
+  },*/
   {
     key: "0x4",
     value: "Rinkeby Testnet",
     icon: <ETHLogo />,
   },
-  {
+/*  {
     key: "0x2a",
     value: "Kovan Testnet",
     icon: <ETHLogo />,
@@ -55,13 +55,13 @@ const menuItems = [
     key: "0x38",
     value: "Binance",
     icon: <BSCLogo />,
-  },
+  },*/
   {
     key: "0x61",
     value: "Smart Chain Testnet",
     icon: <BSCLogo />,
   },
-  {
+/*  {
     key: "0x89",
     value: "Polygon",
     icon: <PolygonLogo />,
@@ -80,7 +80,7 @@ const menuItems = [
     key: "0xa869",
     value: "Avalanche Testnet",
     icon: <AvaxLogo />,
-  },
+  },*/
 ];
 
 function Chains() {
