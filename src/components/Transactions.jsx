@@ -3,6 +3,7 @@ import { useMoralis, useMoralisQuery, useMoralisWeb3Api } from "react-moralis";
 import { Table, Tag, Space } from "antd";
 import moment from "moment";
 import { ETHLogo } from "./Chains/Logos";
+import useContractAddress from "hooks/useContractAddress";
 
 const styles = {
   table: {
@@ -22,7 +23,8 @@ function NFTMarketTransactions() {
       "image",
     ])
   );
-  const queryMarketItems = useMoralisQuery("createdMarketItems");
+  const { suffix } = useContractAddress();
+  const queryMarketItems = useMoralisQuery(suffix + "CreatedMarketItems");
   const fetchMarketItems = JSON.parse(
     JSON.stringify(queryMarketItems.data, [
       "objectId",

@@ -126,10 +126,10 @@ contract SecondContract is
 
     mapping(uint256 => string) public tokenURI;
 
-    mapping(address => uint256) public addressMintedBalance;
-
     function initialize() public initializer {
-        __ERC1155_init("ipfs://QmZAPmKBB4Fp1R91d2KQaCz6nZbAHnS4x5wSg4596uh5FK/{id}.json");
+        __ERC1155_init(
+            "ipfs://QmZAPmKBB4Fp1R91d2KQaCz6nZbAHnS4x5wSg4596uh5FK/{id}.json"
+        );
         __Ownable_init();
         __UUPSUpgradeable_init();
 

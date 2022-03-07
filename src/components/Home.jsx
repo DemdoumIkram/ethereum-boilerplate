@@ -2,11 +2,13 @@ import React from "react";
 import { Card, Typography, Button } from "antd";
 import { useWeb3Contract } from "react-moralis";
 import { abi } from "../contracts/SecondContract.json";
+import useContractAddress from "hooks/useContractAddress";
 
 export default function QuickStart() {
+  const { nftAddress } = useContractAddress();
   const { runContractFunction, isLoading } = useWeb3Contract({
     functionName: 'mint',
-    contractAddress: "0x121949edf57aFC7A57D64ab3e232000281E270b6",
+    contractAddress: nftAddress,
     abi,
     params: { _mintAmount: 1 }
   })

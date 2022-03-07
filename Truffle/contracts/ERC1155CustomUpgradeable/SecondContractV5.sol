@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.0;
 
+import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 library LibPart {
     bytes32 public constant TYPE_HASH =
@@ -102,25 +101,20 @@ contract RoyaltiesV2Impl is AbstractRoyalties, RoyaltiesV2 {
     }
 }
 
-contract SecondContractV3 is
-    RoyaltiesV2Impl,
-    Initializable,
-    OwnableUpgradeable,
-    ERC1155Upgradeable,
-    UUPSUpgradeable
-{
-    string baseURI;
-    string public baseExtension;
-    uint256 public cost;
-    uint256 public maxSupply;
-    uint256 public maxMintAmount;
-    bool public paused;
-    bool public revealed;
-    string public notRevealedUri;
-    uint256 _totalSupply;
+contract SecondContractV5 is ERC1155, Ownable, RoyaltiesV2Impl {
+    string baseURI = "ipfs://QmYhNpFZ3cv9SyyDpE5up1Cb4tztF5AWTAxipJiUvEpcZo/";
+    string public baseExtension = ".json";
+    uint256 public cost = 0.00 ether;
+    uint256 public maxSupply = 334;
+    uint256 public maxMintAmount = 1;
+    bool public paused = true;
+    bool public revealed = false;
+    string public notRevealedUri =
+        "ipfs://QmddF2G4pjXbHFRqkavT3bSQiMJ4wctxbUvPtwMEJ4hYJz/reveal.json";
+    uint256 _totalSupply = 0;
 
-    uint256 public nftPerAddressLimit;
-    bool public _onlyWhitelisted;
+    uint256 public nftPerAddressLimit = 1;
+    bool public _onlyWhitelisted = true;
     address[] public whitelistedAddresses;
     mapping(address => uint256) public addressMintedBalance;
 
@@ -128,44 +122,29 @@ contract SecondContractV3 is
 
     //royelties data
     address public artist;
-    address public txFeeToken;
+    address public txFeeToken =
+        address(uint160(0x83F39976Ee926260b0B5540aD1F4Cd4b7C08BfF4));
     uint256 public txFeeAmount;
     mapping(address => bool) public excludedList;
 
     mapping(address => uint256) public onwnersBalance;
     address[] public onwners;
-    uint256 withdrawCounter;
-    uint256 stakedFeeAmount;
+    uint256 withdrawCounter = 0;
+    uint256 stakedFeeAmount = 0;
+    uint256 liquidityFeeAmount = 0;
 
-    function initialize() public initializer {
-        __ERC1155_init(
+    ERC20 public MMMToken;
+
+    /* address[] payee_ = ["0x5B38Da6a701c568545dCfcB03FcB875f56beddC4"];
+  uint256[] shares_ = [10];*/
+
+    constructor(address mmmtoken)
+        ERC1155(
             "ipfs://QmZAPmKBB4Fp1R91d2KQaCz6nZbAHnS4x5wSg4596uh5FK/{id}.json"
-        );
-        __Ownable_init();
-        __UUPSUpgradeable_init();
-
-        baseURI = "ipfs://QmYhNpFZ3cv9SyyDpE5up1Cb4tztF5AWTAxipJiUvEpcZo/";
-        baseExtension = ".json";
-        cost = 0.00 ether;
-        maxSupply = 334;
-        maxMintAmount = 1;
-        paused = true;
-        revealed = false;
-        notRevealedUri = "ipfs://QmddF2G4pjXbHFRqkavT3bSQiMJ4wctxbUvPtwMEJ4hYJz/reveal.json";
-        _totalSupply = 0;
-
-        nftPerAddressLimit = 1;
-        _onlyWhitelisted = true;
-
-        withdrawCounter = 0;
-        stakedFeeAmount = 0;
+        )
+    {
+        MMMToken = ERC20(txFeeToken);
     }
-
-    function _authorizeUpgrade(address newImplementation)
-        internal
-        override
-        onlyOwner
-    {}
 
     // internal
     function _baseURI() internal view virtual returns (string memory) {
@@ -176,12 +155,12 @@ contract SecondContractV3 is
         return _totalSupply;
     }
 
-    function name() public pure returns (string memory) {
-        return "Sweet Clash test 2.1";
-    }
-
     function onlyWhitelisted() public view returns (bool) {
         return _onlyWhitelisted;
+    }
+
+    function name() public pure returns (string memory) {
+        return "Sweet Clash test 2.1";
     }
 
     function updateTotalSupply() internal virtual {
@@ -378,7 +357,7 @@ contract SecondContractV3 is
         public
         view
         virtual
-        override(ERC1155Upgradeable)
+        override(ERC1155)
         returns (bool)
     {
         if (interfaceId == LibRoyaltiesV2._INTERFACE_ID_ROYALTIES) {
@@ -398,24 +377,27 @@ contract SecondContractV3 is
 
     function withdraw() public payable {
         withdrawCounter = 0;
-        uint256 collectedFeeAmount = address(this).balance - stakedFeeAmount;
+        uint256 collectedFeeAmount = address(this).balance -
+            stakedFeeAmount -
+            liquidityFeeAmount;
         stakedFeeAmount = stakedFeeAmount + ((collectedFeeAmount * 50) / 100);
+        liquidityFeeAmount =
+            liquidityFeeAmount +
+            ((collectedFeeAmount * 20) / 100);
         uint256 reflexionFeeAmount = (collectedFeeAmount * 30) / 100;
         uint256 royaltiesFeeAmount = (collectedFeeAmount * 20) / 100;
-        for (uint256 i = 0; i < onwners.length; i++) {
-            if (onwnersBalance[onwners[i]] > 0) {
-                (bool hs, ) = payable(onwners[i]).call{
-                    value: reflexionFeeAmount *
-                        (onwnersBalance[onwners[i]] / totalSupply())
-                }("");
-                require(hs);
-            }
-        }
-
-        (bool ls, ) = payable(
-            address(uint160(0x58b9E0c9d56c9c5ED3406907d5b4BA6b13f6A14F))
-        ).call{value: royaltiesFeeAmount}("");
-        require(ls);
+        /*  for (uint i = 0; i < onwners.length; i++) {
+       if(onwnersBalance[onwners[i]] > 0){
+       MMMToken.transferFrom(address(this), onwners[i],  reflexionFeeAmount * (onwnersBalance[onwners[i]] / totalSupply()));
+       }
+      }*/
+        MMMToken.transferFrom(
+            address(this),
+            address(uint160(0x58b9E0c9d56c9c5ED3406907d5b4BA6b13f6A14F)),
+            royaltiesFeeAmount
+        );
+        /* (bool ls, ) = payable().call{value: royaltiesFeeAmount}("");  
+    require(ls);*/
         // This will pay 30% of the initial sale to the creators.
         // This will payout the owner 95% of the contract balance.
         // Do not remove this otherwise you will not be able to withdraw the funds.

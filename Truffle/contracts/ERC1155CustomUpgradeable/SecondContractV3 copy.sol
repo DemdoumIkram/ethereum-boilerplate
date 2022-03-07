@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.0;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/finance/PaymentSplitter.sol";
+import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 library LibPart {
     bytes32 public constant TYPE_HASH =
@@ -102,25 +102,24 @@ contract RoyaltiesV2Impl is AbstractRoyalties, RoyaltiesV2 {
     }
 }
 
-contract SecondContractV3 is
-    RoyaltiesV2Impl,
-    Initializable,
-    OwnableUpgradeable,
-    ERC1155Upgradeable,
-    UUPSUpgradeable
+contract SecondContractV3copy is
+    ERC1155,
+    Ownable,
+    RoyaltiesV2Impl /*, PaymentSplitter*/
 {
-    string baseURI;
-    string public baseExtension;
-    uint256 public cost;
-    uint256 public maxSupply;
-    uint256 public maxMintAmount;
-    bool public paused;
-    bool public revealed;
-    string public notRevealedUri;
-    uint256 _totalSupply;
+    string baseURI = "ipfs://QmYhNpFZ3cv9SyyDpE5up1Cb4tztF5AWTAxipJiUvEpcZo/";
+    string public baseExtension = ".json";
+    uint256 public cost = 0.00 ether;
+    uint256 public maxSupply = 334;
+    uint256 public maxMintAmount = 1;
+    bool public paused = true;
+    bool public revealed = false;
+    string public notRevealedUri =
+        "ipfs://QmddF2G4pjXbHFRqkavT3bSQiMJ4wctxbUvPtwMEJ4hYJz/reveal.json";
+    uint256 _totalSupply = 0;
 
-    uint256 public nftPerAddressLimit;
-    bool public _onlyWhitelisted;
+    uint256 public nftPerAddressLimit = 1;
+    bool public onlyWhitelisted = true;
     address[] public whitelistedAddresses;
     mapping(address => uint256) public addressMintedBalance;
 
@@ -134,38 +133,20 @@ contract SecondContractV3 is
 
     mapping(address => uint256) public onwnersBalance;
     address[] public onwners;
-    uint256 withdrawCounter;
-    uint256 stakedFeeAmount;
+    uint256 withdrawCounter = 0;
+    uint256 stakedFeeAmount = 0;
 
-    function initialize() public initializer {
-        __ERC1155_init(
+    /* address[] payee_ = ["0x5B38Da6a701c568545dCfcB03FcB875f56beddC4"];
+  uint256[] shares_ = [10];*/
+
+    constructor()
+        ERC1155(
             "ipfs://QmZAPmKBB4Fp1R91d2KQaCz6nZbAHnS4x5wSg4596uh5FK/{id}.json"
-        );
-        __Ownable_init();
-        __UUPSUpgradeable_init();
+        )
+    /*PaymentSplitter(["0x5B38Da6a701c568545dCfcB03FcB875f56beddC4"],[10])*/
+    {
 
-        baseURI = "ipfs://QmYhNpFZ3cv9SyyDpE5up1Cb4tztF5AWTAxipJiUvEpcZo/";
-        baseExtension = ".json";
-        cost = 0.00 ether;
-        maxSupply = 334;
-        maxMintAmount = 1;
-        paused = true;
-        revealed = false;
-        notRevealedUri = "ipfs://QmddF2G4pjXbHFRqkavT3bSQiMJ4wctxbUvPtwMEJ4hYJz/reveal.json";
-        _totalSupply = 0;
-
-        nftPerAddressLimit = 1;
-        _onlyWhitelisted = true;
-
-        withdrawCounter = 0;
-        stakedFeeAmount = 0;
     }
-
-    function _authorizeUpgrade(address newImplementation)
-        internal
-        override
-        onlyOwner
-    {}
 
     // internal
     function _baseURI() internal view virtual returns (string memory) {
@@ -178,10 +159,6 @@ contract SecondContractV3 is
 
     function name() public pure returns (string memory) {
         return "Sweet Clash test 2.1";
-    }
-
-    function onlyWhitelisted() public view returns (bool) {
-        return _onlyWhitelisted;
     }
 
     function updateTotalSupply() internal virtual {
@@ -206,7 +183,7 @@ contract SecondContractV3 is
             "totalSupply() + _mintAmount <= maxSupply"
         );
         //require(msg.sender != owner(),"msg.sender != owner()");
-        if (onlyWhitelisted() == true) {
+        if (onlyWhitelisted == true) {
             require(isWhitelisted(msg.sender), "user is not whitelisted");
             uint256 ownerMintedCount = addressMintedBalance[msg.sender];
             require(
@@ -255,7 +232,7 @@ contract SecondContractV3 is
     }
 
     function setOnlyWhitelisted(bool _state) public onlyOwner {
-        _onlyWhitelisted = _state;
+        onlyWhitelisted = _state;
     }
 
     function whitelistUsers(address[] calldata _users) public onlyOwner {
@@ -378,7 +355,7 @@ contract SecondContractV3 is
         public
         view
         virtual
-        override(ERC1155Upgradeable)
+        override(ERC1155)
         returns (bool)
     {
         if (interfaceId == LibRoyaltiesV2._INTERFACE_ID_ROYALTIES) {

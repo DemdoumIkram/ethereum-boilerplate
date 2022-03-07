@@ -14,6 +14,8 @@ import NFTTokenIds from "components/NFTTokenIds";
 import React from "react";
 import NFTMarketTransactions from "components/Transactions";
 import Home from "components/Home";
+import Presale from "components/Presale";
+
 const { Header, Footer } = Layout;
 
 const styles = {
@@ -48,7 +50,6 @@ const styles = {
 };
 const App = ({ isServerInfo }) => {
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } = useMoralis();
-  const [inputValue, SetInputValue] = useState("0x121949edf57aFC7A57D64ab3e232000281E270b6");
 
   useEffect(() => {
     const connectorId = window.localStorage.getItem("connectorId");
@@ -107,17 +108,21 @@ const App = ({ isServerInfo }) => {
             <Route exact path="/home">
               <Home />
             </Route>
+            <Route exact path="/presale">
+              <Presale />
+            </Route>
             <Route path="/nftMarket">
-              <NFTTokenIds inputValue={inputValue} />
+              <NFTTokenIds />
             </Route>
             <Route path="/nftBalance">
               <NFTBalance />
             </Route>
             <Route path="/transactions">
-              <NFTMarketTransactions inputValue={inputValue} />
+              <NFTMarketTransactions />
             </Route>
+            {/*
             <Redirect to="/home" />
-            {/*<Route path="/contract">
+            <Route path="/contract">
               <Contract />
             </Route>
             <Route path="/">

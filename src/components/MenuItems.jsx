@@ -1,9 +1,11 @@
 import { useLocation } from "react-router";
 import { Menu } from "antd";
 import { NavLink } from "react-router-dom";
+import { useWhiteList } from "hooks/useWhiteList";
 
 function MenuItems() {
   const { pathname } = useLocation();
+  const { onlyWhitelisted } = useWhiteList();
 
   return (
     <Menu
@@ -36,9 +38,15 @@ function MenuItems() {
       <Menu.Item key="/erc20transfers">
         <NavLink to="/erc20transfers">💸 Transfers</NavLink>
       </Menu.Item>*/}
-      <Menu.Item key="/home">
-        <NavLink to="/home">🚀 NFT Minter</NavLink>
-      </Menu.Item>
+      {onlyWhitelisted && onlyWhitelisted == false ?
+        <Menu.Item key="/home">
+          <NavLink to="/home">🚀 NFT Minter</NavLink>
+        </Menu.Item>
+        :
+        <Menu.Item key="/presale">
+          <NavLink to="/presale">🚀 NFT Presale</NavLink>
+        </Menu.Item>
+      }
       <Menu.Item key="/nftMarket">
         <NavLink to="/nftMarket">🖼 Explorer</NavLink>
       </Menu.Item>

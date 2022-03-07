@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.0;
-
+/*
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
@@ -47,5 +47,5 @@ contract MMM is
         __Safemoon_tiers_init();
 
         emit Transfer(address(0), _msgSender(), _tTotal);*/
-    }
-}
+/*}
+}*/
