@@ -38,7 +38,7 @@ function MenuItems() {
       <Menu.Item key="/erc20transfers">
         <NavLink to="/erc20transfers">💸 Transfers</NavLink>
       </Menu.Item>*/}
-      {onlyWhitelisted && onlyWhitelisted == false ?
+      {onlyWhitelisted && onlyWhitelisted === false ?
         <Menu.Item key="/home">
           <NavLink to="/home">🚀 NFT Minter</NavLink>
         </Menu.Item>
