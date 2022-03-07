@@ -7,7 +7,7 @@ import NFTBalance from "components/NFTBalance";
 import { Layout } from "antd";
 import "antd/dist/antd.css";
 import NativeBalance from "components/NativeBalance";
-import "./style.css";
+import "./style.less";
 import Text from "antd/lib/typography/Text";
 import MenuItems from "./components/MenuItems";
 import NFTTokenIds from "components/NFTTokenIds";
@@ -32,7 +32,7 @@ const styles = {
     position: "fixed",
     zIndex: 1,
     width: "100%",
-    background: "#fff",
+    //background: "#fff",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
@@ -59,9 +59,14 @@ const App = ({ isServerInfo }) => {
   }, [isAuthenticated, isWeb3Enabled]);
 
   return (
-    <Layout style={{ height: "100vh", overflow: "auto" }}>
+    <Layout
+      style={{
+        height: "100vh",
+        overflow: "auto",
+        background: "linear-gradient(#241832, #001529)",
+      }}>
       <Router>
-        <Header style={styles.header}>
+        <Header theme="dark" style={styles.header}>
           <Logo />
           <MenuItems />
           <div style={styles.headerRight}>
@@ -139,10 +144,6 @@ const App = ({ isServerInfo }) => {
           </Switch>
         </div>
       </Router>
-      <Footer style={{ textAlign: "center" }}>
-        <Text style={{ display: "block" }}>
-        </Text>
-      </Footer>
     </Layout>
   );
 };

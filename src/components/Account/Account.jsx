@@ -17,11 +17,11 @@ const styles = {
     alignItems: "center",
     width: "fit-content",
     borderRadius: "12px",
-    backgroundColor: "rgb(244, 244, 244)",
+    border: "solid 2px white",
     cursor: "pointer",
   },
   text: {
-    color: "#21BF96",
+    color: "#8f52df",
   },
   connector: {
     alignItems: "center",
@@ -47,7 +47,7 @@ function Account() {
   const { authenticate, isAuthenticated, account, chainId, logout } = useMoralis();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isAuthModalVisible, setIsAuthModalVisible] = useState(false);
-  
+
   if (!isAuthenticated || !account) {
     return (
       <>
