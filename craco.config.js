@@ -32,6 +32,8 @@ module.exports = {
                             //icons
                             "@icon-color-hover": "#001529",
                             "@icon-color": "white",
+                            //items
+                            "@item-hover-bg": "#4621a2",
                         },
                         javascriptEnabled: true,
                     },

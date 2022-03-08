@@ -3,6 +3,7 @@ import { Menu, Dropdown, Button } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { AvaxLogo, PolygonLogo, BSCLogo, ETHLogo } from "./Logos";
 import { useChain, useMoralis } from "react-moralis";
+import React from "react";
 
 const styles = {
   item: {
@@ -35,13 +36,8 @@ const menuItems = [
       key: "0x3",
       value: "Ropsten Testnet",
       icon: <ETHLogo />,
-    },*/
-  {
-    key: "0x4",
-    value: "Rinkeby Testnet",
-    icon: <ETHLogo />,
-  },
-  /*  {
+    },
+    {
       key: "0x2a",
       value: "Kovan Testnet",
       icon: <ETHLogo />,
@@ -58,7 +54,7 @@ const menuItems = [
     },*/
   {
     key: "0x61",
-    value: "Smart Chain Testnet",
+    value: "Binance Testnet",
     icon: <BSCLogo />,
   },
   /*  {
@@ -70,6 +66,11 @@ const menuItems = [
     key: "0x13881",
     value: "Mumbai",
     icon: <PolygonLogo />,
+  },
+  {
+    key: "0x4",
+    value: "Rinkeby Testnet",
+    icon: <ETHLogo />,
   },
   /*{
     key: "0xa86a",
@@ -84,7 +85,7 @@ const menuItems = [
 ];
 
 function Chains() {
-  const { switchNetwork, chainId, chain } = useChain();
+  const { switchNetwork, chainId } = useChain();
   const { isAuthenticated } = useMoralis();
   const [selected, setSelected] = useState({});
 
