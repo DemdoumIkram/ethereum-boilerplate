@@ -22,6 +22,8 @@ const styles = {
   },
   text: {
     color: "#8f52df",
+    marginRight: "15px",
+    cursor: "pointer",
   },
   connector: {
     alignItems: "center",

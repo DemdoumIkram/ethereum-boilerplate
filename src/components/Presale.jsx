@@ -1,11 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Typography, Button, Modal } from "antd";
 import { useMoralis } from "react-moralis";
 import axios from 'axios';
+import { connectors } from "./Account/config";
+import Text from "antd/lib/typography/Text";
+
 const whiteListLimit = 10;
 
+const styles = {
+  connector: {
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "column",
+    height: "auto",
+    justifyContent: "center",
+    marginLeft: "auto",
+    marginRight: "auto",
+    padding: "20px 5px",
+    cursor: "pointer",
+  },
+  icon: {
+    alignSelf: "center",
+    fill: "rgb(40, 13, 95)",
+    flexShrink: "0",
+    marginBottom: "8px",
+    height: "30px",
+  },
+}
+
 export default function Presale() {
-  const { Moralis, chainId, account } = useMoralis();
+  const { Moralis, chainId, account, isAuthenticated, authenticate } = useMoralis();
+  const [isAuthModalVisible, setIsAuthModalVisible] = useState(false);
 
   //function to load ip address from the API
   const getIpAddress = async () => {
@@ -37,7 +62,7 @@ export default function Presale() {
     const queryAll = new Moralis.Query(users);
     const whiteList = await queryAll.find();
     if (whiteList.length < whiteListLimit) {
-      if (account) {
+      if (account && isAuthenticated) {
         const ipAddress = await getIpAddress();
         const queryIpAddress = new Moralis.Query(users);
         queryIpAddress.equalTo("ipAddress", ipAddress);
@@ -63,7 +88,7 @@ export default function Presale() {
           }
         }
       } else {
-        alertModal(false, 'No wallet is connected')
+        setIsAuthModalVisible(true)
       }
     } else {
       alertModal(false, 'WhiteList limit is reached')
@@ -95,11 +120,48 @@ export default function Presale() {
           size="large"
           style={{ width: "100%" }}
           loading={false}
-          onClick={() => { console.log("hha"); whiteListUser() }}
+          onClick={() => { whiteListUser() }}
         >
           Subscribe to the WhiteList
         </Button>
       </Card>
+      <Modal
+        visible={isAuthModalVisible}
+        footer={null}
+        onCancel={() => setIsAuthModalVisible(false)}
+        centered
+        bodyStyle={{
+          padding: "15px",
+          fontSize: "17px",
+          fontWeight: "500",
+        }}
+        style={{ fontSize: "16px", fontWeight: "500" }}
+        width="340px"
+      >
+        <div style={{ padding: "10px", display: "flex", justifyContent: "center", fontWeight: "700", fontSize: "20px" }}>
+          Connect Wallet
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+          {connectors.map(({ title, icon, connectorId }, key) => (
+            <div
+              style={styles.connector}
+              key={key}
+              onClick={async () => {
+                try {
+                  await authenticate({ provider: connectorId });
+                  window.localStorage.setItem("connectorId", connectorId);
+                  setIsAuthModalVisible(false);
+                } catch (e) {
+                  console.error(e);
+                }
+              }}
+            >
+              <img src={icon} alt={title} style={styles.icon} />
+              <Text style={{ fontSize: "14px" }}>{title}</Text>
+            </div>
+          ))}
+        </div>
+      </Modal>
     </div>
   );
 }

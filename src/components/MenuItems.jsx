@@ -76,7 +76,7 @@ function MenuItems() {
       <Menu.Item key="/transactions">
         <NavLink to="/transactions">
           <div style={{ display: "flex", alignItems: "center" }}>
-            <img src={transaction} alt="" style={{ marginRight: "5px", width: '16px', height: '16px' }}></img>Transactions
+            <img src={transaction} alt="" style={{ marginRight: "5px", width: '20px', height: '22px' }}></img>Transactions
           </div>
         </NavLink>
       </Menu.Item>
