@@ -60,6 +60,7 @@ function Account() {
           visible={isAuthModalVisible}
           footer={null}
           onCancel={() => setIsAuthModalVisible(false)}
+          centered
           bodyStyle={{
             padding: "15px",
             fontSize: "17px",
@@ -129,6 +130,7 @@ function Account() {
         }}
         style={{ fontSize: "16px", fontWeight: "500" }}
         width="400px"
+        centered
       >
         Account
         <Card

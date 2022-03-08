@@ -163,6 +163,7 @@ function NFTTokenIds() {
           onCancel={() => setVisibility(false)}
           onOk={() => purchase()}
           okText="Buy"
+          centered
         >
           <Spin spinning={loading}>
             <div
@@ -194,6 +195,7 @@ function NFTTokenIds() {
           visible={visible}
           onCancel={() => setVisibility(false)}
           onOk={() => setVisibility(false)}
+          centered
         >
           <img
             src={nftToBuy?.image}

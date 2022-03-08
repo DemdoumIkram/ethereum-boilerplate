@@ -306,6 +306,7 @@ function DEX({ chain, customTokens = {} }) {
         onCancel={() => setFromModalActive(false)}
         bodyStyle={{ padding: 0 }}
         width="450px"
+        centered
         footer={null}
       >
         <InchModal
@@ -321,6 +322,7 @@ function DEX({ chain, customTokens = {} }) {
         onCancel={() => setToModalActive(false)}
         bodyStyle={{ padding: 0 }}
         width="450px"
+        centered
         footer={null}
       >
         <InchModal open={isToModalActive} onClose={() => setToModalActive(false)} setToken={setToToken} tokenList={tokens} />

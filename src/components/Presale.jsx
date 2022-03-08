@@ -17,6 +17,7 @@ export default function Presale() {
   function alertModal(success, content) {
     let secondsToGo = 5;
     const modal = success ? Modal.success({ title: "Success!", content }) : Modal.error({ title: "Error!", content });
+    modal.update({ centered: true })
     setTimeout(() => {
       modal.destroy();
     }, secondsToGo * 1000);

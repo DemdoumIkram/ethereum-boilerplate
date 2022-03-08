@@ -2,6 +2,10 @@ import { useLocation } from "react-router";
 import { Menu } from "antd";
 import { NavLink } from "react-router-dom";
 import { useWhiteList } from "hooks/useWhiteList";
+import purse from "assets/icons/purse.png";
+import explorer from "assets/icons/internet-explorer.png";
+import transaction from "assets/icons/transaction.png";
+import startup from "assets/icons/startup.png";
 
 function MenuItems() {
   const { pathname } = useLocation();
@@ -40,21 +44,41 @@ function MenuItems() {
       </Menu.Item>*/}
       {onlyWhitelisted && onlyWhitelisted === false ?
         <Menu.Item key="/home">
-          <NavLink to="/home">🚀 NFT Minter</NavLink>
+          <NavLink to="/home">
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <img src={startup} alt="" style={{ marginRight: "5px", width: '16px', height: '16px' }}></img>NFT Minter
+            </div>
+          </NavLink>
         </Menu.Item>
         :
         <Menu.Item key="/presale">
-          <NavLink to="/presale">🚀 NFT Presale</NavLink>
+          <NavLink to="/presale">
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <img src={startup} alt="" style={{ marginRight: "5px", width: '16px', height: '16px' }}></img>NFT Presale
+            </div>
+          </NavLink>
         </Menu.Item>
       }
       <Menu.Item key="/nftMarket">
-        <NavLink to="/nftMarket">🖼 Explorer</NavLink>
+        <NavLink to="/nftMarket">
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <img src={explorer} alt="" style={{ marginRight: "5px", width: '16px', height: '16px' }}></img>Explorer
+          </div>
+        </NavLink>
       </Menu.Item>
       <Menu.Item key="/nftBalance">
-        <NavLink to="/nftBalance">🖼 Your Collection</NavLink>
+        <NavLink to="/nftBalance">
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <img src={purse} alt="" style={{ marginRight: "5px", width: '16px', height: '16px' }}></img>Your Collection
+          </div>
+        </NavLink>
       </Menu.Item>
       <Menu.Item key="/transactions">
-        <NavLink to="/transactions">🖼 Transactions</NavLink>
+        <NavLink to="/transactions">
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <img src={transaction} alt="" style={{ marginRight: "5px", width: '16px', height: '16px' }}></img>Transactions
+          </div>
+        </NavLink>
       </Menu.Item>
       {/*<Menu.Item key="/contract">
         <NavLink to="/contract">📄 Contract</NavLink>

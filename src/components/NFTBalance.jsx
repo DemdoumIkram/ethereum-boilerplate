@@ -215,6 +215,7 @@ function NFTBalance() {
         onCancel={() => setVisibility(false)}
         onOk={() => list(nftToSell, price)}
         okText="List"
+        centered
         footer={[
           <Button onClick={() => setVisibility(false)}>
             Cancel
