@@ -34,6 +34,10 @@ module.exports = {
                             "@icon-color": "white",
                             //items
                             "@item-hover-bg": "#4621a2",
+                            //alerts 
+                            "@alert-message-color": "#ff7875",
+                            "@alert-warning-bg-color": "#001529",
+                            "@alert-warning-border-color": "#001529",
                         },
                         javascriptEnabled: true,
                     },

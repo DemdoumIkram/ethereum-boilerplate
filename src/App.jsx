@@ -150,7 +150,7 @@ const App = ({ isServerInfo }) => {
 
 export const Logo = () => (
   <div style={{ display: "flex" }}>
-    <img src={logo} alt="" style={{ width: "60px" }}></img>
+    <img src={logo} alt="" style={{ width: "70px" }}></img>
   </div>
 );
 

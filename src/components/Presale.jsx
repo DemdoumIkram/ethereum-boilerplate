@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Typography, Button, Modal } from "antd";
+import { Card, Typography, Button, Modal, Alert } from "antd";
 import { useMoralis } from "react-moralis";
 import axios from 'axios';
 import { connectors } from "./Account/config";
@@ -112,8 +112,14 @@ export default function Presale() {
         <img
           src="https://gateway.pinata.cloud/ipfs/QmaWzXnGrnsBfDgeK3hKHNGaRYaDbs5o5XsgNNftFgfV16/reveal.png"
           alt="Test"
-          style={{ marginBottom: "2rem", height: "350px" }}
+          style={{ "margin": "auto", marginBottom: "2rem", height: "350px" }}
         />
+
+        <Alert
+          message="Please select your blockchain carefully, you can only subscribe once!"
+          type="warning"
+        />
+
         <Button
           type="primary"
           shape="round"
