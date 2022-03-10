@@ -114,13 +114,13 @@ contract SecondContractV3 is
     uint256 public cost;
     uint256 public maxSupply;
     uint256 public maxMintAmount;
-    bool public paused;
+    bool _paused;
     bool public revealed;
     string public notRevealedUri;
     uint256 _totalSupply;
 
     uint256 public nftPerAddressLimit;
-    bool public _onlyWhitelisted;
+    bool _onlyWhitelisted;
     address[] public whitelistedAddresses;
     mapping(address => uint256) public addressMintedBalance;
 
@@ -149,7 +149,7 @@ contract SecondContractV3 is
         cost = 0.00 ether;
         maxSupply = 334;
         maxMintAmount = 1;
-        paused = true;
+        _paused = true;
         revealed = false;
         notRevealedUri = "ipfs://QmddF2G4pjXbHFRqkavT3bSQiMJ4wctxbUvPtwMEJ4hYJz/reveal.json";
         _totalSupply = 0;
@@ -184,6 +184,10 @@ contract SecondContractV3 is
         return _onlyWhitelisted;
     }
 
+    function isPaused() public view returns (bool) {
+        return _paused;
+    }
+
     function updateTotalSupply() internal virtual {
         _totalSupply = _totalSupply + 1;
     }
@@ -198,7 +202,7 @@ contract SecondContractV3 is
     }
 
     function mint(uint256 _mintAmount) public payable {
-        require(!paused, "paused");
+        require(!_paused, "paused");
         require(_mintAmount > 0, "_mintAmount > 0");
         require(_mintAmount <= maxMintAmount, "_mintAmount <= maxMintAmount");
         require(
@@ -285,7 +289,7 @@ contract SecondContractV3 is
   }
 */
     function setPaused(bool _state) public onlyOwner {
-        paused = _state;
+        _paused = _state;
     }
 
     function setBaseURI(string memory _newBaseURI) public onlyOwner {

@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Typography, Button } from "antd";
 import { useWeb3Contract } from "react-moralis";
-import { abi } from "../contracts/SecondContract.json";
+import { abi } from "../contracts/SecondContractV3.json";
 import useContractAddress from "hooks/useContractAddress";
 
 export default function QuickStart() {

@@ -42,7 +42,7 @@ function MenuItems() {
       <Menu.Item key="/erc20transfers">
         <NavLink to="/erc20transfers">💸 Transfers</NavLink>
       </Menu.Item>*/}
-      {onlyWhitelisted && onlyWhitelisted === false ?
+      {onlyWhitelisted === false ?
         <Menu.Item key="/home">
           <NavLink to="/home">
             <div style={{ display: "flex", alignItems: "center" }}>
