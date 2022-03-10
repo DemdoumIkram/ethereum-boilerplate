@@ -173,7 +173,7 @@ function NFTBalance() {
         )}
         <Skeleton loading={!NFTBalances?.result}>
           {NFTBalances && NFTBalances.result &&
-            NFTBalances.result.filter((nft) => nft.token_address == nftAddress).map((nft, index) => (
+            NFTBalances.result.filter((nft) => nft.token_address == String(nftAddress).toLowerCase()).map((nft, index) => (
               <Card
                 hoverable
                 actions={[

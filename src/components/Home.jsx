@@ -1,11 +1,13 @@
 import React from "react";
-import { Card, Typography, Button } from "antd";
+import { Card, Typography, Button, Alert } from "antd";
 import { useWeb3Contract } from "react-moralis";
 import { abi } from "../contracts/SecondContractV3.json";
 import useContractAddress from "hooks/useContractAddress";
+import { useWhiteList } from "hooks/useWhiteList";
 
 export default function QuickStart() {
   const { nftAddress } = useContractAddress();
+  const { onlyWhitelisted } = useWhiteList();
   const { runContractFunction, isLoading } = useWeb3Contract({
     functionName: 'mint',
     contractAddress: nftAddress,
@@ -30,6 +32,12 @@ export default function QuickStart() {
           alt="Test"
           style={{ marginBottom: "2rem", height: "350px" }}
         />
+        {onlyWhitelisted &&
+          <Alert
+            message="Only whitelisted users are allowed to mint."
+            type="info"
+          />
+        }
         <Button
           type="primary"
           shape="round"

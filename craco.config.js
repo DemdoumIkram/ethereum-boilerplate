@@ -38,6 +38,8 @@ module.exports = {
                             "@alert-message-color": "#ff7875",
                             "@alert-warning-bg-color": "#001529",
                             "@alert-warning-border-color": "#001529",
+                            "@alert-info-bg-color": "#001529",
+                            "@alert-info-border-color": "#001529",
                         },
                         javascriptEnabled: true,
                     },

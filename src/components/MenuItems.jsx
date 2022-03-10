@@ -10,7 +10,7 @@ import React from "react";
 
 function MenuItems() {
   const { pathname } = useLocation();
-  const { onlyWhitelisted } = useWhiteList();
+  const { isPaused } = useWhiteList();
 
   return (
     <Menu
@@ -46,9 +46,9 @@ function MenuItems() {
 
       <Menu.Item key="/home">
         <NavLink to="/home">
-          {onlyWhitelisted != undefined &&
+          {isPaused != undefined &&
             <div style={{ display: "flex", alignItems: "center" }}>
-              <img src={startup} alt="" style={{ marginRight: "5px", width: '16px', height: '16px' }}></img>NFT {onlyWhitelisted === false ? " Minter" : "Presale"}
+              <img src={startup} alt="" style={{ marginRight: "5px", width: '16px', height: '16px' }}></img>NFT {isPaused === false ? " Minter" : "Presale"}
             </div>
           }
         </NavLink>

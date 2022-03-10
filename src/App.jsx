@@ -52,7 +52,7 @@ const styles = {
 };
 const App = ({ isServerInfo }) => {
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } = useMoralis();
-  const { onlyWhitelisted } = useWhiteList();
+  const { isPaused } = useWhiteList();
 
   useEffect(() => {
     const connectorId = window.localStorage.getItem("connectorId");
@@ -115,9 +115,9 @@ const App = ({ isServerInfo }) => {
               <ERC20Transfers />
           </Route>*/}
             <Route exact path="/home">
-              {onlyWhitelisted != undefined && onlyWhitelisted === false &&
+              {isPaused != undefined && isPaused === false &&
                 <Home />}
-              {onlyWhitelisted != undefined && onlyWhitelisted === true &&
+              {isPaused != undefined && isPaused === true &&
                 <Presale />}
             </Route>
             <Route path="/nftMarket">
