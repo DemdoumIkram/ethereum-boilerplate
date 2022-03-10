@@ -16,6 +16,7 @@ import NFTMarketTransactions from "components/Transactions";
 import Home from "components/Home";
 import Presale from "components/Presale";
 import logo from "Logo.png";
+import { useWhiteList } from "hooks/useWhiteList";
 
 const { Header, Footer } = Layout;
 
@@ -51,6 +52,7 @@ const styles = {
 };
 const App = ({ isServerInfo }) => {
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } = useMoralis();
+  const { onlyWhitelisted } = useWhiteList();
 
   useEffect(() => {
     const connectorId = window.localStorage.getItem("connectorId");
@@ -113,10 +115,10 @@ const App = ({ isServerInfo }) => {
               <ERC20Transfers />
           </Route>*/}
             <Route exact path="/home">
-              <Home />
-            </Route>
-            <Route exact path="/presale">
-              <Presale />
+              {onlyWhitelisted != undefined && onlyWhitelisted === false &&
+                <Home />}
+              {onlyWhitelisted != undefined && onlyWhitelisted === true &&
+                <Presale />}
             </Route>
             <Route path="/nftMarket">
               <NFTTokenIds />
@@ -127,14 +129,15 @@ const App = ({ isServerInfo }) => {
             <Route path="/transactions">
               <NFTMarketTransactions />
             </Route>
+            <Route path="/">
+              <Redirect to="/home" />
+            </Route>
             {/*
             <Redirect to="/home" />
             <Route path="/contract">
               <Contract />
             </Route>
-            <Route path="/">
-              <Redirect to="/quickstart" />
-            </Route>
+
             <Route path="/ethereum-boilerplate">
               <Redirect to="/quickstart" />
             </Route>

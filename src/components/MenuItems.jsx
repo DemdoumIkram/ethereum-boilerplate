@@ -6,6 +6,7 @@ import purse from "assets/icons/purse.png";
 import explorer from "assets/icons/internet-explorer.png";
 import transaction from "assets/icons/transaction.png";
 import startup from "assets/icons/startup.png";
+import React from "react";
 
 function MenuItems() {
   const { pathname } = useLocation();
@@ -42,23 +43,16 @@ function MenuItems() {
       <Menu.Item key="/erc20transfers">
         <NavLink to="/erc20transfers">💸 Transfers</NavLink>
       </Menu.Item>*/}
-      {onlyWhitelisted === false ?
-        <Menu.Item key="/home">
-          <NavLink to="/home">
+
+      <Menu.Item key="/home">
+        <NavLink to="/home">
+          {onlyWhitelisted != undefined &&
             <div style={{ display: "flex", alignItems: "center" }}>
-              <img src={startup} alt="" style={{ marginRight: "5px", width: '16px', height: '16px' }}></img>NFT Minter
+              <img src={startup} alt="" style={{ marginRight: "5px", width: '16px', height: '16px' }}></img>NFT {onlyWhitelisted === false ? " Minter" : "Presale"}
             </div>
-          </NavLink>
-        </Menu.Item>
-        :
-        <Menu.Item key="/presale">
-          <NavLink to="/presale">
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <img src={startup} alt="" style={{ marginRight: "5px", width: '16px', height: '16px' }}></img>NFT Presale
-            </div>
-          </NavLink>
-        </Menu.Item>
-      }
+          }
+        </NavLink>
+      </Menu.Item>
       <Menu.Item key="/nftMarket">
         <NavLink to="/nftMarket">
           <div style={{ display: "flex", alignItems: "center" }}>
