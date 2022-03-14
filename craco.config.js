@@ -40,6 +40,10 @@ module.exports = {
                             "@alert-warning-border-color": "#001529",
                             "@alert-info-bg-color": "#001529",
                             "@alert-info-border-color": "#001529",
+                            //Cards
+                            "@card-actions-background": "#14375942",
+                            "@border-color-split": "#643c74",
+                            "@text-color-secondary": "white",
                         },
                         javascriptEnabled: true,
                     },

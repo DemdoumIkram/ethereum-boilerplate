@@ -17,6 +17,7 @@ import Home from "components/Home";
 import Presale from "components/Presale";
 import logo from "Logo.png";
 import { useWhiteList } from "hooks/useWhiteList";
+import useContractAddress from "hooks/useContractAddress";
 
 const { Header, Footer } = Layout;
 
@@ -53,6 +54,7 @@ const styles = {
 const App = ({ isServerInfo }) => {
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } = useMoralis();
   const { isPaused } = useWhiteList();
+  const { suffix } = useContractAddress();
 
   useEffect(() => {
     const connectorId = window.localStorage.getItem("connectorId");
@@ -121,7 +123,9 @@ const App = ({ isServerInfo }) => {
                 <Presale />}
             </Route>
             <Route path="/nftMarket">
-              <NFTTokenIds />
+              {suffix &&
+                <NFTTokenIds suffix={suffix} />
+              }
             </Route>
             <Route path="/nftBalance">
               <NFTBalance />

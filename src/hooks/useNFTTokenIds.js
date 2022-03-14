@@ -9,7 +9,7 @@ export const useNFTTokenIds = (options) => {
   const { token } = useMoralisWeb3Api();
   const { chainId, isInitialized } = useMoralis();
   const { resolveLink } = useIPFS();
-  const [NFTTokenIds, setNFTTokenIds] = useState([]);
+  const [NFTTokenIds, setNFTTokenIds] = useState();
   const [data, setData] = useState();
   const [totalNFTs, setTotalNFTs] = useState();
   const [fetchSuccess, setFetchSuccess] = useState(true);

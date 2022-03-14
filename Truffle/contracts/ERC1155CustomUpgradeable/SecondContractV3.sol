@@ -340,7 +340,7 @@ contract SecondContractV3 is
         onwnersBalance[to]++;
         withdrawCounter++;
         if (withdrawCounter == 4) {
-            withdraw();
+            //    withdraw();
         }
     }
 

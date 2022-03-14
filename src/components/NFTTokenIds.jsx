@@ -22,7 +22,7 @@ const styles = {
   },
 };
 
-function NFTTokenIds() {
+function NFTTokenIds({ suffix }) {
   const { NFTTokenIds } = useNFTTokenIds();
   const { Moralis, chainId, account } = useMoralis();
   const [nftToBuy, setNftToBuy] = useState(null);
@@ -31,7 +31,7 @@ function NFTTokenIds() {
   const { verifyMetadata } = useVerifyMetadata();
   const nativeName = getNativeByChain(chainId);
 
-  const { marketAddress, marketContractABI, suffix } = useContractAddress();
+  const { marketAddress, marketContractABI } = useContractAddress();
   const queryMarketItems = useMoralisQuery(suffix + "CreatedMarketItems");
   const fetchMarketItems = JSON.parse(
     JSON.stringify(queryMarketItems.data, [
@@ -115,9 +115,11 @@ function NFTTokenIds() {
   console.log("NFTTokenIds", NFTTokenIds);
   return (
     <div style={{ padding: "15px", maxWidth: "1030px", width: "100%" }}>
-      <h1>🖼 EXPLORER </h1>
       <div style={styles.NFTs}>
         <Skeleton loading={!NFTTokenIds}>
+          {NFTTokenIds && (NFTTokenIds.length <= 0) &&
+            <div style={{ margin: "auto", marginTop: "25vh" }}><h3>No items found.</h3></div>
+          }
           {NFTTokenIds &&
             NFTTokenIds.map((nft, index) => {
               //Verify Metadata
@@ -135,7 +137,11 @@ function NFTTokenIds() {
                       <ShoppingCartOutlined onClick={() => handleBuyClick(nft)} />
                     </Tooltip>,
                   ]}
-                  style={{ width: 240, border: "2px solid #e7eaf3" }}
+                  style={{
+                    width: 240,
+                    background: "#14375942",
+                    borderRadius: '10px',
+                  }}
                   cover={
                     <Image
                       preview={false}

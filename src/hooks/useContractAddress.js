@@ -19,7 +19,7 @@ export const useContractAddress = () => {
     setMarketAddress(newMarketAddress)
     const newSuffix = getSuffix(chainId);
     setSuffix(newSuffix)
-    console.log("current nft address: ", newNftAddress);
+    console.log("current nft address: ", newNftAddress, suffix);
   }, [chainId]);
 
   return {
